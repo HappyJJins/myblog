@@ -1,6 +1,6 @@
 ######################## default configuration ####################
 baseURL = "https://HappyJJins.github.io"
-languageCode = "kr-ko"
+languageCode = "euc-kr"
 title = "ÇØ¸¼Âð | Developer Blog"
 theme = "liva-hugo"
 summaryLength = "10"
