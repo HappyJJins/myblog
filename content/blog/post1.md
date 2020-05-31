@@ -106,7 +106,7 @@ IDF를 이해하기 위해 DF를 알아보자.
 
 
 ##### Reference
-(https://www.google.com)
+(https://thinkwarelab.wordpress.com/2016/11/14/ir-tf-idf-%EC%97%90-%EB%8C%80%ED%95%B4-%EC%95%8C%EC%95%84%EB%B4%85%EC%8B%9C%EB%8B%A4/)
 
 <!-- 
 ##### Heading 5
