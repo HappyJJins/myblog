@@ -1,7 +1,7 @@
 ######################## default configuration ####################
 baseURL = "https://HappyJJins.github.io"
 languageCode = "ko-kr"
-title = "ÇØ¸¼Âð | Developer Blog"
+title = "JJins' Happy Virus | Developer Diary"
 theme = "liva-hugo"
 summaryLength = "10"
 paginate = 6
@@ -82,7 +82,7 @@ logo = "images/logo.png"
 home = "Home"
 # Meta data
 description = "This is meta description"
-author = "Themefisher"
+author = "JJins"
 # Google Analitycs
 googleAnalitycsID = "Your ID"
 # Contact Information
@@ -105,14 +105,14 @@ copyright = "| copyright &copy; 2020 [Themefisher](https://themefisher.com) All 
 [[params.social]]
 title = "facebook"
 icon = "ti-facebook" # themify icon : https://themify.me/themify-icons
-link = "#"
+link = "https://www.facebook.com/hajin.jeong.14/"
 
 [[params.social]]
 title = "instagram"
 icon = "ti-instagram" # themify icon : https://themify.me/themify-icons
-link = "#"
+link = "https://www.instagram.com/jjin_jjins__/"
 
 [[params.social]]
 title = "github"
 icon = "ti-github" # themify icon : https://themify.me/themify-icons
-link = "#"
+link = "https://github.com/HappyJJins/HappyJJins.github.io"
