@@ -11,7 +11,7 @@ description: "this is meta description"
 
 # taxonomies
 categories: 
-  - "Data analysis -Python"
+  - "Data analysis _Python"
 tags:
   - "tf-idf"
   - "python"
