@@ -104,6 +104,10 @@ IDF를 이해하기 위해 DF를 알아보자.
 ## Conclusion
 - TF-IDF값은 특정 문서 내에 단어 빈도(TF)가 높을수록, 전체 문서들엔 그 단어를 포함한 문서(DF)가 적을수록 높아진다.
 
+
+##### Reference
+(https://www.google.com)
+
 <!-- 
 ##### Heading 5
 ###### Heading 6
