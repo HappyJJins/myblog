@@ -1,6 +1,6 @@
 ---
 title: "초개인화, 테크핀"
-date: 2020-05-31T10:07:47+06:00
+date: 2020-06-01
 draft: false
 
 # post thumb
