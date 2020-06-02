@@ -11,7 +11,7 @@ description: "this is meta description"
 
 # taxonomies
 categories: 
-  - "지식 쌓기"
+  - "data analysis python"
 tags:
   - "추천알고리즘"
   - "머신러닝"
