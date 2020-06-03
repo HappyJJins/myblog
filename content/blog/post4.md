@@ -1,6 +1,6 @@
 ---
-title: "영화추천 알고리즘 01"
-date: 2020-06-02
+title: "영화 추천 알고리즘"
+date: 2020-06-03
 draft: false
 
 # post thumb
@@ -11,16 +11,22 @@ description: "this is meta description"
 
 # taxonomies
 categories: 
-  - "data analysis python"
+  - "Data analysis _Python"
 tags:
   - "추천알고리즘"
-  - "머신러닝"
   - "영화추천알고리즘"
+  - "Python"
+  - "kaggle"
 
 
 # post type
 type: "featured"
 ---
+
+# Movies Recommender System
+
+Package를 설치하는 환경폴더(my_env)를 따로 만들어 실행할 때마다 설치할 필요 없도록 설정했습니다.
+이와 관련한 포스팅은 다음에 하겠습니다.
 
 ```python
 import os, sys
@@ -28,18 +34,16 @@ from google.colab import drive
 drive.mount('/content/drive')
 
 my_path = '/content/notebooks'
-# Colab Notebooks 안에 my_env 폴더에 패키지 저장
 os.symlink('/content/drive/My Drive/Colab Notebooks/my_env', my_path)
 sys.path.insert(0, my_path)
 ```
 
 ```python
-
-```
-
-```python
 !pip install scikit-surprise
 ```
+
+<hr>
+저희가 사용할 모듈을 import 해주세요.
 
 ```python
 %matplotlib inline
@@ -54,24 +58,35 @@ from sklearn.metrics.pairwise import linear_kernel, cosine_similarity
 from nltk.stem.snowball import SnowballStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import wordnet
-from surprise import Reader, Dataset, SVD
+from surprise import Reader, Dataset, SVD, accuracy
 from surprise.model_selection import cross_validate
+from surprise.model_selection import KFold
 
 import warnings; warnings.simplefilter('ignore')
 ```
 
+<hr>
+
+## Simple Recommender
+
+영화에 대한 다양한 정보들이 담긴 'movies_metadata.csv' 파일을 불러와 md 변수에 저장합니다
+
 ```python
-md = pd. read_csv('/content/drive/My Drive/Colab Notebooks/MovieRcmmd/data/data/movies_metadata.csv')
+md = pd.read_csv('/content/drive/My Drive/Colab Notebooks/MovieRcmmd/data/data/movies_metadata.csv')
 md.head()
 ```
 
+'genres'(장르) 컬럼의 각 행들의 타입이 dict. 장르 id와 이름으로 구성.
+
+{'id': ... , 'name': '...'},{'id': ... ,'name' : '...'}, ,,,
+
 ```python
-md['genres'][0] # 각 행들의 구조가 "{'id':_,'name':'_'},{'id';_,'name':'_'}, ,,,"
+md['genres'][0] 
 ```
 
 ```python
-print(type(md['genres'][0])) # dict들이 str으로 묶여있음
-md['genres'].apply(literal_eval) #[{dict},{dict}] <- str을 list로 바꿔줌
+print(type(md['genres'][0])) # "[{dict}, {dict},] <- dict들이 str으로 묶여있음
+md['genres'].apply(literal_eval) # [{dict},{dict}] <- str을 list로 바꿔줌
 ```
 
 ```python
@@ -555,9 +570,75 @@ ratings.head()
 
 ```python
 data = Dataset.load_from_df(ratings[['userId', 'movieId', 'rating']], reader) #데이터셋 로딩
+svd = SVD() # SVD :특이값 분해 알고리즘
+
+# 데이터를 5개의 부분집합{x1, x2, ,,, , x5}으로 나눈다.
+# 5개의 부분집합 중 하나의 검증용 데이터셋(test_set)를 제외한 나머지 데이터셋을 학습용 데이터(train_set)로 사용하여 회귀분석 모형을 만들고 test_set으로 검증
+# 5회 반복
+cross_validate(svd, data, measures=['RMSE', 'MAE'], cv=5, verbose=True)
+
+# kf = KFold(n_splits = 5)
+# for train_set, test_set in kf.split(data):
+#     svd.fit(train_set)
+#     predictions = svd.test(test_set)
+#     RMSE = accuracy.rmse(predictions, verbose=True)
+#     MAE = accuracy.mae(predictions, verbose=True)
 ```
 
 ```python
-svd = SVD() # SVD :특이값 분해 알고리즘
-kf = KFold(n_splits = 5)
+print(svd.predict(1, 302))
+# 1번 user가 302번 movie에 줬을 점수 추정치가 2.94
+```
+
+Hybrid Recommender
+
+*   Input :User ID and the Title of a Movie
+*   Output :Similar movies sorted on the basis of expected ratins by that
+particular user
+
+
+```python
+def convert_int(x):
+  try:
+    return int(x)
+  except:
+    return np.nan
+```
+
+```python
+id_map = pd.read_csv('/content/drive/My Drive/Colab Notebooks/MovieRcmmd/data/data/links_small.csv')[['movieId', 'tmdbId']]
+id_map['tmdbId'] = id_map['tmdbId'].apply(convert_int)
+id_map.columns = ['movieId', 'id']
+id_map = id_map.merge(smd[['title', 'id']], on='id').set_index('title')
+id_mapindices
+```
+
+```python
+indices_map = id_map.set_index('id')
+indices_map
+```
+
+```python
+def hybrid(userId, title):
+  idx = indices[title]
+  tmdbId = id_map.loc[title]['id']
+  movie_id = id_map.loc[title]['movieId']
+  sim_scores = list(enumerate(cosine_sim[int(idx)]))
+  sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+  sim_scores = sim_scores[1:26]
+  movie_indices = [i[0] for i in sim_scores]
+  movies = smd.iloc[movie_indices][['title', 'vote_count', 'vote_average', 'year', 'id']]
+  movies['est'] = movies['id'].apply(lambda x: svd.predict(userId, indices_map.loc[x]['movieId']).est)
+  movies = movies.sort_values('est', ascending=False)
+  return movies.head(10)
+```
+
+```python
+hybrid(1, 'Avatar')
+# 1번 유저가 선택한 영화 'Avatar'와 유사도가 높은 25개의 영화를 추출해 젔을 법한 점수(rating) 추정
+# rating est 상위 10개 추출
+```
+
+```python
+hybrid(500, 'Avatar')
 ```

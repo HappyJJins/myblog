@@ -21,7 +21,7 @@ tags:
 
 
 # post type
-type: "featured"
+type: "post"
 ---
 
 ### IT가 양날의 검이 되는 세상

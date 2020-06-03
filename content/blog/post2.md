@@ -19,7 +19,7 @@ tags:
   - "테크핀"
 
 # post type
-type: "featured"
+type: "post"
 ---
 
 1. 초개인화
