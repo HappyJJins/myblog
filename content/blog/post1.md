@@ -18,7 +18,7 @@ tags:
   - "data analysis"
 
 # post type
-type: "featured"
+type: "post"
 ---
 
 ## TF-IDF
