@@ -20,7 +20,7 @@ tags:
 
 
 # post type
-type: "featured"
+type: "post"
 ---
 
 # Movies Recommender System
